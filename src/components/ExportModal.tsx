@@ -9,15 +9,17 @@ interface ExportModalProps {
   exportOptions: ExportOptions;
   onExportOptionsChange: (updates: Partial<ExportOptions>) => void;
   onExport: () => void;
+  onCopy: () => void;
 }
 
 const ExportModal: React.FC<ExportModalProps> = ({
   isOpen,
+  isOHlC,
   onClose,
   exportOptions,
   onExportOptionsChange,
   onExport,
-  isOHlC,
+  onCopy,
 }) => {
   if (!isOpen) return null;
 
@@ -192,6 +194,15 @@ const ExportModal: React.FC<ExportModalProps> = ({
               className="flex-1 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors"
             >
               Export
+            </button>
+            <button
+              onClick={() => {
+                onCopy();
+                onClose();
+              }}
+              className="flex-1 px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors"
+            >
+              Copy
             </button>
           </div>
         </div>

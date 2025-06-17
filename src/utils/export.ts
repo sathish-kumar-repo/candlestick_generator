@@ -1,11 +1,104 @@
+import { toast } from "react-toastify";
 import { CandlestickConfig } from "../types";
 
 export const exportCandlestick = (
   config: CandlestickConfig,
   isDark: boolean
 ) => {
+  const svg = generateCandlestickSVG(config, isDark);
   const { exportOptions } = config;
-  const { data, style, mode, forceBullish } = config;
+  const serializer = new XMLSerializer();
+  const svgString = serializer.serializeToString(svg);
+
+  if (exportOptions.format === "svg") {
+    downloadFile(svgString, "candlestick.svg", "image/svg+xml");
+  } else {
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d")!;
+    const img = new Image();
+    const totalWidth = parseInt(svg.getAttribute("width") || "300");
+    const totalHeight = parseInt(svg.getAttribute("height") || "300");
+
+    img.onload = () => {
+      canvas.width = totalWidth;
+      canvas.height = totalHeight;
+      ctx.drawImage(img, 0, 0);
+      const type = exportOptions.format === "png" ? "image/png" : "image/jpeg";
+      canvas.toBlob((blob) => {
+        if (blob) {
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = `candlestick.${exportOptions.format}`;
+          a.click();
+          URL.revokeObjectURL(url);
+        }
+      }, type);
+    };
+
+    const svgBlob = new Blob([svgString], { type: "image/svg+xml" });
+    img.src = URL.createObjectURL(svgBlob);
+  }
+};
+
+export const copyCandlestickToClipboard = async (
+  config: CandlestickConfig,
+  isDark: boolean
+) => {
+  const svg = generateCandlestickSVG(config, isDark);
+  const serializer = new XMLSerializer();
+  const svgString = serializer.serializeToString(svg);
+  const blob = new Blob([svgString], { type: "image/svg+xml" });
+
+  const img = new Image();
+  const totalWidth = parseInt(svg.getAttribute("width") || "300");
+  const totalHeight = parseInt(svg.getAttribute("height") || "300");
+
+  img.onload = async () => {
+    const canvas = document.createElement("canvas");
+    canvas.width = totalWidth;
+    canvas.height = totalHeight;
+    const ctx = canvas.getContext("2d")!;
+    ctx.drawImage(img, 0, 0);
+
+    canvas.toBlob(async (blob) => {
+      if (blob) {
+        try {
+          await navigator.clipboard.write([
+            new ClipboardItem({ [blob.type]: blob }),
+          ]);
+          toast.success("SVG copied to clipboard!", {
+            position: "bottom-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            theme: isDark ? "dark" : "light",
+          });
+        } catch (err) {
+          toast.error(`Failed to copy: ${err}`, {
+            position: "bottom-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            theme: isDark ? "dark" : "light",
+          });
+        }
+      }
+    });
+  };
+
+  img.src = URL.createObjectURL(blob);
+};
+
+const generateCandlestickSVG = (
+  config: CandlestickConfig,
+  isDark: boolean
+): SVGSVGElement => {
+  const { exportOptions, data, style, mode, forceBullish } = config;
 
   let bodyHeight: number;
   let upperWickHeight: number;
@@ -15,7 +108,6 @@ export const exportCandlestick = (
   if (mode === "ohlc") {
     const { open, high, low, close } = data;
     isBullish = forceBullish;
-
     const range = high - low;
     const scale = 200 / Math.max(range, 1);
 
@@ -29,12 +121,11 @@ export const exportCandlestick = (
     lowerWickHeight = style.wickBottomHeight;
   }
 
-  const paddingX = 80; // Horizontal padding for price text
+  const paddingX = 80;
   const totalHeight = upperWickHeight + bodyHeight + lowerWickHeight + 40;
   const totalWidth = style.bodyWidth + paddingX * 2;
   const centerX = totalWidth / 2;
   const bodyTop = 20 + upperWickHeight;
-
   const bodyColor = isBullish ? style.buyerColor : style.sellerColor;
   const wickColor = style.design === "minimal" ? "#6B7280" : bodyColor;
 
@@ -145,7 +236,6 @@ export const exportCandlestick = (
               : "Close"
           }` as keyof typeof exportOptions
         ];
-
       if (!show) return;
 
       const labelY = 20 + i * lineHeight;
@@ -167,44 +257,14 @@ export const exportCandlestick = (
 
       if (exportOptions.pricePosition === "right") {
         const rightText = text.cloneNode(true) as Element;
-        rightText.setAttribute("x", (totalWidth - 10).toString()); // 10px from right
+        rightText.setAttribute("x", (totalWidth - 10).toString());
         rightText.setAttribute("text-anchor", "end");
         svg.appendChild(rightText);
       }
     });
   }
 
-  const serializer = new XMLSerializer();
-  const svgString = serializer.serializeToString(svg);
-
-  if (exportOptions.format === "svg") {
-    downloadFile(svgString, "candlestick.svg", "image/svg+xml");
-  } else {
-    const canvas = document.createElement("canvas");
-    const ctx = canvas.getContext("2d")!;
-    const img = new Image();
-
-    img.onload = () => {
-      canvas.width = totalWidth;
-      canvas.height = totalHeight;
-      ctx.drawImage(img, 0, 0);
-
-      const type = exportOptions.format === "png" ? "image/png" : "image/jpeg";
-      canvas.toBlob((blob) => {
-        if (blob) {
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement("a");
-          a.href = url;
-          a.download = `candlestick.${exportOptions.format}`;
-          a.click();
-          URL.revokeObjectURL(url);
-        }
-      }, type);
-    };
-
-    const svgBlob = new Blob([svgString], { type: "image/svg+xml" });
-    img.src = URL.createObjectURL(svgBlob);
-  }
+  return svg;
 };
 
 const downloadFile = (content: string, filename: string, mimeType: string) => {

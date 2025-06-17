@@ -5,7 +5,7 @@ import CandlestickRenderer from "./components/CandlestickRenderer";
 import ExportModal from "./components/ExportModal";
 import { CandlestickConfig, PredefinedPattern } from "./types";
 import { useLocalStorage, useHistory } from "./hooks/useLocalStorage";
-import { exportCandlestick } from "./utils/export";
+import { copyCandlestickToClipboard, exportCandlestick } from "./utils/export";
 import { predefinedPatterns } from "./data/patterns";
 import LeftControlPanel from "./components/LeftControlPanel";
 import RightControlPanel from "./components/RightControlPanel";
@@ -125,6 +125,10 @@ function App() {
     exportCandlestick(config, isDark);
   };
 
+  const handleCopy = () => {
+    copyCandlestickToClipboard(config, isDark);
+  };
+
   const handleExportOptionsChange = (
     updates: Partial<typeof config.exportOptions>
   ) => {
@@ -225,6 +229,7 @@ function App() {
           exportOptions={config.exportOptions}
           onExportOptionsChange={handleExportOptionsChange}
           onExport={handleExport}
+          onCopy={handleCopy}
         />
       </div>
     </div>

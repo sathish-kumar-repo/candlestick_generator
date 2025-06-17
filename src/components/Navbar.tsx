@@ -26,7 +26,6 @@ const Navbar: React.FC<NavbarProps> = ({
   onToggelPattern,
   onToggleTheme,
   onReset,
-
   onExport,
   onRandomGenerate,
   onSaveToHistory,
