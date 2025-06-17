@@ -26,11 +26,17 @@ const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
   onSimpleBodyHeightChange,
   onForceBullishChange,
 }) => {
+  // ❗️ OHLC Validation Errors
+  const highTooLow = data.high < Math.max(data.open, data.close);
+  const lowTooHigh = data.low > Math.min(data.open, data.close);
+  const lowHigherThanHigh = data.low > data.high;
+
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-lg space-y-6">
       <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
         Candlestick Controls
       </h3>
+
       {/* Mode Selection */}
       <div>
         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -59,8 +65,9 @@ const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
           </button>
         </div>
       </div>
+
       {/* Buyer/Seller Toggle */}
-      {mode == "simple" && (
+      {mode === "simple" && (
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
             Candlestick Type
@@ -92,58 +99,73 @@ const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
 
       {/* Data Inputs */}
       {mode === "ohlc" ? (
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Open
-            </label>
-            <input
-              type="number"
-              value={data.open}
-              onChange={(e) =>
-                onDataChange({ open: parseFloat(e.target.value) || 0 })
-              }
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
-            />
+        <div className="space-y-3">
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Open
+              </label>
+              <input
+                type="number"
+                value={data.open}
+                onChange={(e) =>
+                  onDataChange({ open: parseFloat(e.target.value) || 0 })
+                }
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                High
+              </label>
+              <input
+                type="number"
+                value={data.high}
+                onChange={(e) =>
+                  onDataChange({ high: parseFloat(e.target.value) || 0 })
+                }
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Low
+              </label>
+              <input
+                type="number"
+                value={data.low}
+                onChange={(e) =>
+                  onDataChange({ low: parseFloat(e.target.value) || 0 })
+                }
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Close
+              </label>
+              <input
+                type="number"
+                value={data.close}
+                onChange={(e) =>
+                  onDataChange({ close: parseFloat(e.target.value) || 0 })
+                }
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
+              />
+            </div>
           </div>
-          <div>
-            <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
-              High
-            </label>
-            <input
-              type="number"
-              value={data.high}
-              onChange={(e) =>
-                onDataChange({ high: parseFloat(e.target.value) || 0 })
-              }
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
-            />
-          </div>
-          <div>
-            <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Low
-            </label>
-            <input
-              type="number"
-              value={data.low}
-              onChange={(e) =>
-                onDataChange({ low: parseFloat(e.target.value) || 0 })
-              }
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
-            />
-          </div>
-          <div>
-            <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Close
-            </label>
-            <input
-              type="number"
-              value={data.close}
-              onChange={(e) =>
-                onDataChange({ close: parseFloat(e.target.value) || 0 })
-              }
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
-            />
+
+          {/* ❗ Individual OHLC Validation Messages */}
+          <div className="text-xs text-red-500 space-y-1">
+            {highTooLow && (
+              <p>High must be greater than or equal to max(Open, Close).</p>
+            )}
+            {lowTooHigh && (
+              <p>Low must be less than or equal to min(Open, Close).</p>
+            )}
+            {lowHigherThanHigh && (
+              <p>Low must be less than or equal to High.</p>
+            )}
           </div>
         </div>
       ) : (
@@ -164,6 +186,7 @@ const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
           </div>
         </div>
       )}
+
       {/* Design Style */}
       <div>
         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -187,8 +210,9 @@ const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
           )}
         </div>
       </div>
+
       {/* Colors */}
-      {mode == "simple" && (
+      {mode === "simple" && (
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
