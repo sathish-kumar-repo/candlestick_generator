@@ -59,6 +59,14 @@ const Navbar: React.FC<NavbarProps> = ({
 
             <div className="flex items-center space-x-2">
               <button
+                onClick={onRawCopy}
+                className="p-2 rounded-lg bg-green-100 hover:bg-green-200 dark:bg-green-900 dark:hover:bg-green-800 text-green-600 dark:text-green-300 transition-colors"
+                title="Raw Candlestick Copy"
+              >
+                <Copy className="w-5 h-5" />
+              </button>
+
+              <button
                 onClick={onToggelPattern}
                 className="p-2 rounded-lg bg-pink-100 hover:bg-pink-200 dark:bg-pink-900 dark:hover:bg-pink-800 text-pink-600 dark:text-pink-300 transition-colors"
                 title="Predefined Patterns"
@@ -96,14 +104,6 @@ const Navbar: React.FC<NavbarProps> = ({
                 title="Export"
               >
                 <Download className="w-5 h-5" />
-              </button>
-
-              <button
-                onClick={onRawCopy}
-                className="p-2 rounded-lg bg-green-100 hover:bg-green-200 dark:bg-green-900 dark:hover:bg-green-800 text-green-600 dark:text-green-300 transition-colors"
-                title="Raw Candlestick Copy"
-              >
-                <Copy className="w-5 h-5" />
               </button>
 
               <button

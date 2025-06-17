@@ -130,7 +130,10 @@ function App() {
   };
 
   const handleRawCopy = () => {
-    copyCandlestickToClipboard(defaultConfig, isDark);
+    copyCandlestickToClipboard(
+      { ...config, exportOptions: defaultConfig.exportOptions },
+      isDark
+    );
   };
 
   const handleExportOptionsChange = (
