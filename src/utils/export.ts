@@ -67,12 +67,11 @@ export const copyCandlestickToClipboard = async (
           await navigator.clipboard.write([
             new ClipboardItem({ [blob.type]: blob }),
           ]);
-          toast.success("SVG copied to clipboard!", {
+          toast.success("Copied to clipboard!", {
             position: "bottom-right",
             autoClose: 2000,
             hideProgressBar: false,
             closeOnClick: true,
-            // pauseOnHover: true,
             draggable: true,
             theme: isDark ? "dark" : "light",
           });
@@ -82,7 +81,6 @@ export const copyCandlestickToClipboard = async (
             autoClose: 2000,
             hideProgressBar: false,
             closeOnClick: true,
-            // pauseOnHover: true,
             draggable: true,
             theme: isDark ? "dark" : "light",
           });

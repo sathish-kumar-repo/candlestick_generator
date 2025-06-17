@@ -40,7 +40,6 @@ const Navbar: React.FC<NavbarProps> = ({
       autoClose: 2000,
       hideProgressBar: false,
       closeOnClick: true,
-      // pauseOnHover: true,
       draggable: true,
       theme: isDark ? "dark" : "light",
     });
