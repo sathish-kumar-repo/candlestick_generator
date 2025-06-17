@@ -19,6 +19,7 @@ const defaultConfig: CandlestickConfig = {
     sellerColor: "#ef4444",
     bodyOpacity: 0.8,
     bodyWidth: 30,
+    bodyHeight: 60,
     bodyBorderRadius: 2,
     wickTopHeight: 40,
     wickBottomHeight: 30,
@@ -26,7 +27,6 @@ const defaultConfig: CandlestickConfig = {
     wickOpacity: 1,
   },
   mode: "simple",
-  simpleBodyHeight: 60,
   forceBullish: true,
   exportOptions: {
     format: "png",
@@ -72,10 +72,6 @@ function App() {
 
   const handleModeChange = (mode: "ohlc" | "simple") => {
     setConfig({ ...config, mode });
-  };
-
-  const handleSimpleBodyHeightChange = (height: number) => {
-    setConfig({ ...config, simpleBodyHeight: height });
   };
 
   const handleForceBullishChange = (forceBullish: boolean) => {
@@ -152,42 +148,39 @@ function App() {
         />
 
         {isPatternOpen && (
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
+          <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
             <PatternSelector onSelectPattern={handlePatternSelect} />
           </div>
         )}
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
             {/* Left Column: Left Control Panel */}
-            <div>
+            <div className="lg:col-span-3">
               <LeftControlPanel
                 style={config.style}
                 data={config.data}
                 mode={config.mode}
-                simpleBodyHeight={config.simpleBodyHeight}
                 forceBullish={config.forceBullish}
                 onStyleChange={handleStyleChange}
                 onDataChange={handleDataChange}
                 onModeChange={handleModeChange}
-                onSimpleBodyHeightChange={handleSimpleBodyHeightChange}
                 onForceBullishChange={handleForceBullishChange}
               />
             </div>
             {/* Middle Column: Candlestick Renderer */}
-            <div>
+            <div className="lg:col-span-6">
               <CandlestickRenderer
                 data={config.data}
                 style={config.style}
                 mode={config.mode}
-                simpleBodyHeight={config.simpleBodyHeight}
                 forceBullish={config.forceBullish}
                 isDark={isDark}
               />
             </div>
 
             {/* Right Column: Right Control Panel */}
-            <div>
+            <div className="lg:col-span-3">
               <RightControlPanel
                 isSimple={config.mode == "simple"}
                 style={config.style}
@@ -227,6 +220,7 @@ function App() {
 
         <ExportModal
           isOpen={isExportModalOpen}
+          isOHlC={config.mode == "ohlc"}
           onClose={() => setIsExportModalOpen(false)}
           exportOptions={config.exportOptions}
           onExportOptionsChange={handleExportOptionsChange}

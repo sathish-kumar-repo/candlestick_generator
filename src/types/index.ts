@@ -11,6 +11,7 @@ export interface CandlestickStyle {
   sellerColor: string;
   bodyOpacity: number;
   bodyWidth: number;
+  bodyHeight: number;
   bodyBorderRadius: number;
   wickTopHeight: number;
   wickBottomHeight: number;
@@ -35,7 +36,6 @@ export interface CandlestickConfig {
   data: CandlestickData;
   style: CandlestickStyle;
   mode: "ohlc" | "simple";
-  simpleBodyHeight: number;
   forceBullish: boolean;
   exportOptions: ExportOptions;
 }

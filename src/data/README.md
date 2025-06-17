@@ -38,3 +38,5 @@ Pre defined candlestick are:
 2. Spinning Top
 3. High-Wave Candle
 4. Paper Umbrella
+
+price no in custom

@@ -5,12 +5,10 @@ interface LeftControlPanelProps {
   style: CandlestickStyle;
   data: CandlestickData;
   mode: "ohlc" | "simple";
-  simpleBodyHeight: number;
   forceBullish: boolean;
   onStyleChange: (updates: Partial<CandlestickStyle>) => void;
   onDataChange: (updates: Partial<CandlestickData>) => void;
   onModeChange: (mode: "ohlc" | "simple") => void;
-  onSimpleBodyHeightChange: (height: number) => void;
   onForceBullishChange: (forceBullish: boolean) => void;
 }
 
@@ -18,12 +16,10 @@ const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
   style,
   data,
   mode,
-  simpleBodyHeight,
   forceBullish,
   onStyleChange,
   onDataChange,
   onModeChange,
-  onSimpleBodyHeightChange,
   onForceBullishChange,
 }) => {
   const maxOC = Math.max(data.open, data.close);
@@ -185,7 +181,7 @@ const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
         </div>
       ) : (
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+          {/* <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
             Body Height
           </label>
           <input
@@ -198,7 +194,7 @@ const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
           />
           <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
             {simpleBodyHeight}px
-          </div>
+          </div> */}
         </div>
       )}
 

@@ -5,7 +5,6 @@ interface CandlestickRendererProps {
   data: CandlestickData;
   style: CandlestickStyle;
   mode: "ohlc" | "simple";
-  simpleBodyHeight: number;
   forceBullish: boolean;
   isDark: boolean;
 }
@@ -14,15 +13,13 @@ const CandlestickRenderer: React.FC<CandlestickRendererProps> = ({
   data,
   style,
   mode,
-  simpleBodyHeight,
   forceBullish,
   isDark,
 }) => {
-  const svgWidth = 300;
-  const svgHeight = 400;
-  const centerX = svgWidth / 2;
+  let svgWidth = 300;
+  let svgHeight = 400;
+  let centerX = svgWidth / 2;
 
-  // Calculate candlestick properties based on mode
   let bodyHeight: number;
   let bodyTop: number;
   let upperWickHeight: number;
@@ -34,7 +31,7 @@ const CandlestickRenderer: React.FC<CandlestickRendererProps> = ({
     isBullish = close >= open;
 
     const range = high - low;
-    const scale = 200 / Math.max(range, 1); // Scale to fit in 200px area
+    const scale = 200 / Math.max(range, 1);
 
     bodyHeight = Math.abs(close - open) * scale;
     bodyTop =
@@ -42,33 +39,34 @@ const CandlestickRenderer: React.FC<CandlestickRendererProps> = ({
     upperWickHeight = (high - Math.max(close, open)) * scale;
     lowerWickHeight = (Math.min(close, open) - low) * scale;
   } else {
-    // Simple mode
     isBullish = forceBullish;
-    bodyHeight = simpleBodyHeight;
-    bodyTop = svgHeight / 2 - bodyHeight / 2;
+    bodyHeight = style.bodyHeight;
     upperWickHeight = style.wickTopHeight;
     lowerWickHeight = style.wickBottomHeight;
+
+    const padding = 40; // Add some breathing room
+    svgHeight = upperWickHeight + bodyHeight + lowerWickHeight + padding;
+    svgWidth = style.bodyWidth + 80; // Extra space for shadows & labels
+    centerX = svgWidth / 2;
+    bodyTop = upperWickHeight + padding / 2;
   }
 
-  // Determine colors based on design
   let bodyColor: string;
   let wickColor: string;
 
   if (style.design === "minimal") {
     bodyColor = isBullish ? style.buyerColor : style.sellerColor;
-    wickColor = "#6B7280"; // Grey color for minimal design
+    wickColor = "#6B7280";
   } else {
     bodyColor = isBullish ? style.buyerColor : style.sellerColor;
     wickColor = bodyColor;
   }
 
-  // Apply design-specific effects
   const getShadowFilter = () => {
-    if (style.design === "elevated") {
+    if (style.design === "elevated")
       return `drop-shadow(0 4px 8px rgba(0,0,0,0.2))`;
-    } else if (style.design === "modern") {
+    if (style.design === "modern")
       return `drop-shadow(0 2px 4px rgba(0,0,0,0.1))`;
-    }
     return "none";
   };
 
@@ -109,7 +107,7 @@ const CandlestickRenderer: React.FC<CandlestickRendererProps> = ({
         >
           {getGradient()}
 
-          {/* Grid lines (optional) */}
+          {/* Grid background */}
           <defs>
             <pattern
               id="grid"
@@ -156,12 +154,12 @@ const CandlestickRenderer: React.FC<CandlestickRendererProps> = ({
             />
           )}
 
-          {/* Candlestick body */}
+          {/* Body */}
           <rect
             x={centerX - style.bodyWidth / 2}
             y={bodyTop}
             width={style.bodyWidth}
-            height={Math.max(bodyHeight, 2)} // Minimum height for doji
+            height={Math.max(bodyHeight, 2)}
             fill={
               style.design === "modern" ? "url(#candleGradient)" : bodyColor
             }
@@ -173,9 +171,9 @@ const CandlestickRenderer: React.FC<CandlestickRendererProps> = ({
             style={{ filter: getShadowFilter() }}
           />
 
-          {/* Price labels */}
+          {/* OHLC Labels */}
           {mode === "ohlc" && (
-            <g className="text-xs" fill={isDark ? "#d1d5db" : "#6b7280"}>
+            <g fill={isDark ? "#d1d5db" : "#6b7280"}>
               <text x={10} y={20} fontSize="12">
                 H: {data.high.toFixed(2)}
               </text>

@@ -1,9 +1,10 @@
-import React from 'react';
-import { X } from 'lucide-react';
-import { ExportOptions } from '../types';
+import React from "react";
+import { X } from "lucide-react";
+import { ExportOptions } from "../types";
 
 interface ExportModalProps {
   isOpen: boolean;
+  isOHlC: boolean;
   onClose: () => void;
   exportOptions: ExportOptions;
   onExportOptionsChange: (updates: Partial<ExportOptions>) => void;
@@ -15,7 +16,8 @@ const ExportModal: React.FC<ExportModalProps> = ({
   onClose,
   exportOptions,
   onExportOptionsChange,
-  onExport
+  onExport,
+  isOHlC,
 }) => {
   if (!isOpen) return null;
 
@@ -41,14 +43,14 @@ const ExportModal: React.FC<ExportModalProps> = ({
               Format
             </label>
             <div className="flex space-x-2">
-              {(['svg', 'png', 'jpg'] as const).map((format) => (
+              {(["svg", "png", "jpg"] as const).map((format) => (
                 <button
                   key={format}
                   onClick={() => onExportOptionsChange({ format })}
                   className={`px-3 py-2 rounded-lg text-sm font-medium uppercase transition-colors ${
                     exportOptions.format === format
-                      ? 'bg-blue-500 text-white'
-                      : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                      ? "bg-blue-500 text-white"
+                      : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
                   }`}
                 >
                   {format}
@@ -58,67 +60,85 @@ const ExportModal: React.FC<ExportModalProps> = ({
           </div>
 
           {/* Price Options */}
-          <div className="space-y-3">
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                id="withPrice"
-                checked={exportOptions.withPrice}
-                onChange={(e) => onExportOptionsChange({ withPrice: e.target.checked })}
-                className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-              />
-              <label htmlFor="withPrice" className="ml-2 text-sm text-gray-700 dark:text-gray-300">
-                Include Price Information
-              </label>
-            </div>
+          {isOHlC && (
+            <div className="space-y-3">
+              <div className="flex items-center">
+                <input
+                  type="checkbox"
+                  id="withPrice"
+                  checked={exportOptions.withPrice}
+                  onChange={(e) =>
+                    onExportOptionsChange({ withPrice: e.target.checked })
+                  }
+                  className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                />
+                <label
+                  htmlFor="withPrice"
+                  className="ml-2 text-sm text-gray-700 dark:text-gray-300"
+                >
+                  Include Price Information
+                </label>
+              </div>
 
-            {exportOptions.withPrice && (
-              <>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Price Position
-                  </label>
+              {exportOptions.withPrice && (
+                <>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Price Position
+                    </label>
+                    <div className="grid grid-cols-2 gap-2">
+                      {(["left", "right", "both", "none"] as const).map(
+                        (position) => (
+                          <button
+                            key={position}
+                            onClick={() =>
+                              onExportOptionsChange({ pricePosition: position })
+                            }
+                            className={`px-3 py-2 rounded-lg text-sm font-medium capitalize transition-colors ${
+                              exportOptions.pricePosition === position
+                                ? "bg-blue-500 text-white"
+                                : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
+                            }`}
+                          >
+                            {position}
+                          </button>
+                        )
+                      )}
+                    </div>
+                  </div>
+
                   <div className="grid grid-cols-2 gap-2">
-                    {(['left', 'right', 'both', 'none'] as const).map((position) => (
-                      <button
-                        key={position}
-                        onClick={() => onExportOptionsChange({ pricePosition: position })}
-                        className={`px-3 py-2 rounded-lg text-sm font-medium capitalize transition-colors ${
-                          exportOptions.pricePosition === position
-                            ? 'bg-blue-500 text-white'
-                            : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
-                        }`}
-                      >
-                        {position}
-                      </button>
+                    {[
+                      { key: "showOpen", label: "Show Open" },
+                      { key: "showHigh", label: "Show High" },
+                      { key: "showLow", label: "Show Low" },
+                      { key: "showClose", label: "Show Close" },
+                    ].map(({ key, label }) => (
+                      <div key={key} className="flex items-center">
+                        <input
+                          type="checkbox"
+                          id={key}
+                          checked={
+                            exportOptions[key as keyof ExportOptions] as boolean
+                          }
+                          onChange={(e) =>
+                            onExportOptionsChange({ [key]: e.target.checked })
+                          }
+                          className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                        />
+                        <label
+                          htmlFor={key}
+                          className="ml-2 text-xs text-gray-700 dark:text-gray-300"
+                        >
+                          {label}
+                        </label>
+                      </div>
                     ))}
                   </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-2">
-                  {[
-                    { key: 'showOpen', label: 'Show Open' },
-                    { key: 'showHigh', label: 'Show High' },
-                    { key: 'showLow', label: 'Show Low' },
-                    { key: 'showClose', label: 'Show Close' }
-                  ].map(({ key, label }) => (
-                    <div key={key} className="flex items-center">
-                      <input
-                        type="checkbox"
-                        id={key}
-                        checked={exportOptions[key as keyof ExportOptions] as boolean}
-                        onChange={(e) => onExportOptionsChange({ [key]: e.target.checked })}
-                        className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                      />
-                      <label htmlFor={key} className="ml-2 text-xs text-gray-700 dark:text-gray-300">
-                        {label}
-                      </label>
-                    </div>
-                  ))}
-                </div>
-              </>
-            )}
-          </div>
+                </>
+              )}
+            </div>
+          )}
 
           {/* Background Options */}
           <div className="space-y-3">
@@ -127,10 +147,15 @@ const ExportModal: React.FC<ExportModalProps> = ({
                 type="checkbox"
                 id="withBackground"
                 checked={exportOptions.withBackground}
-                onChange={(e) => onExportOptionsChange({ withBackground: e.target.checked })}
+                onChange={(e) =>
+                  onExportOptionsChange({ withBackground: e.target.checked })
+                }
                 className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
               />
-              <label htmlFor="withBackground" className="ml-2 text-sm text-gray-700 dark:text-gray-300">
+              <label
+                htmlFor="withBackground"
+                className="ml-2 text-sm text-gray-700 dark:text-gray-300"
+              >
                 Include Background
               </label>
             </div>
@@ -140,10 +165,15 @@ const ExportModal: React.FC<ExportModalProps> = ({
                 type="checkbox"
                 id="withGrid"
                 checked={exportOptions.withGrid}
-                onChange={(e) => onExportOptionsChange({ withGrid: e.target.checked })}
+                onChange={(e) =>
+                  onExportOptionsChange({ withGrid: e.target.checked })
+                }
                 className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
               />
-              <label htmlFor="withGrid" className="ml-2 text-sm text-gray-700 dark:text-gray-300">
+              <label
+                htmlFor="withGrid"
+                className="ml-2 text-sm text-gray-700 dark:text-gray-300"
+              >
                 Include Grid
               </label>
             </div>
