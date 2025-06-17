@@ -26,10 +26,21 @@ const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
   onSimpleBodyHeightChange,
   onForceBullishChange,
 }) => {
-  // ❗️ OHLC Validation Errors
-  const highTooLow = data.high < Math.max(data.open, data.close);
-  const lowTooHigh = data.low > Math.min(data.open, data.close);
+  const maxOC = Math.max(data.open, data.close);
+  const minOC = Math.min(data.open, data.close);
+
+  // Validation flags
+  const highTooLow = data.high < maxOC;
+  const lowTooHigh = data.low > minOC;
   const lowHigherThanHigh = data.low > data.high;
+
+  // Helper: input class with red border if error
+  const inputClass = (hasError: boolean) =>
+    `w-full px-3 py-2 border rounded-lg text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white ${
+      hasError
+        ? "border-red-500 focus:ring-red-500"
+        : "border-gray-300 dark:border-gray-600 focus:ring-blue-500"
+    }`;
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-lg space-y-6">
@@ -37,7 +48,7 @@ const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
         Candlestick Controls
       </h3>
 
-      {/* Mode Selection */}
+      {/* Mode toggle */}
       <div>
         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
           Input Mode
@@ -66,7 +77,7 @@ const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
         </div>
       </div>
 
-      {/* Buyer/Seller Toggle */}
+      {/* Buyer/Seller */}
       {mode === "simple" && (
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -97,10 +108,11 @@ const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
         </div>
       )}
 
-      {/* Data Inputs */}
+      {/* OHLC Input */}
       {mode === "ohlc" ? (
         <div className="space-y-3">
           <div className="grid grid-cols-2 gap-4">
+            {/* Open */}
             <div>
               <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Open
@@ -111,9 +123,10 @@ const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
                 onChange={(e) =>
                   onDataChange({ open: parseFloat(e.target.value) || 0 })
                 }
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
+                className={inputClass(false)}
               />
             </div>
+            {/* High */}
             <div>
               <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
                 High
@@ -124,9 +137,10 @@ const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
                 onChange={(e) =>
                   onDataChange({ high: parseFloat(e.target.value) || 0 })
                 }
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
+                className={inputClass(highTooLow || lowHigherThanHigh)}
               />
             </div>
+            {/* Low */}
             <div>
               <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Low
@@ -137,9 +151,10 @@ const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
                 onChange={(e) =>
                   onDataChange({ low: parseFloat(e.target.value) || 0 })
                 }
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
+                className={inputClass(lowTooHigh || lowHigherThanHigh)}
               />
             </div>
+            {/* Close */}
             <div>
               <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Close
@@ -150,13 +165,13 @@ const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
                 onChange={(e) =>
                   onDataChange({ close: parseFloat(e.target.value) || 0 })
                 }
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
+                className={inputClass(false)}
               />
             </div>
           </div>
 
-          {/* ❗ Individual OHLC Validation Messages */}
-          <div className="p-2 rounded-lg bg-red-100 hover:bg-red-200 dark:bg-red-900 dark:hover:bg-red-800 text-red-600 dark:text-red-300 transition-colors space-y-1">
+          {/* Error messages */}
+          <div className="text-xs text-red-500 space-y-1 mt-2">
             {highTooLow && (
               <p>High must be greater than or equal to max(Open, Close).</p>
             )}
@@ -187,7 +202,7 @@ const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
         </div>
       )}
 
-      {/* Design Style */}
+      {/* Design selection */}
       <div>
         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
           Design Style
@@ -211,7 +226,7 @@ const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
         </div>
       </div>
 
-      {/* Colors */}
+      {/* Color pickers */}
       {mode === "simple" && (
         <div className="grid grid-cols-2 gap-4">
           <div>
