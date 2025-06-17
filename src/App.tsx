@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Navbar from "./components/Navbar";
 import PatternSelector from "./components/PatternSelector";
-import ControlPanel from "./components/ControlPanel";
 import CandlestickRenderer from "./components/CandlestickRenderer";
 import ExportModal from "./components/ExportModal";
 import { CandlestickConfig, PredefinedPattern } from "./types";
 import { useLocalStorage, useHistory } from "./hooks/useLocalStorage";
 import { exportCandlestick } from "./utils/export";
 import { predefinedPatterns } from "./data/patterns";
+import LeftControlPanel from "./components/LeftControlPanel";
+import RightControlPanel from "./components/RightControlPanel";
 
 const defaultConfig: CandlestickConfig = {
   name: "Custom",
@@ -47,6 +48,7 @@ function App() {
   );
   const [isDark, setIsDark] = useLocalStorage<boolean>("theme-dark", false);
   const [isExportModalOpen, setIsExportModalOpen] = useState(false);
+  const [isPatternOpen, setIsPatternOpen] = useState(false);
   const { history, addToHistory, clearHistory } =
     useHistory<CandlestickConfig>("candlestick");
 
@@ -89,6 +91,7 @@ function App() {
       forceBullish: pattern.category === "bullish",
     };
     setConfig(newConfig);
+    setIsPatternOpen(false);
   };
 
   const handleReset = () => {
@@ -162,6 +165,7 @@ function App() {
         <Navbar
           isDark={isDark}
           onToggleTheme={() => setIsDark(!isDark)}
+          onToggelPattern={() => setIsPatternOpen(!isPatternOpen)}
           onReset={handleReset}
           onShare={handleShare}
           onExport={() => setIsExportModalOpen(true)}
@@ -169,13 +173,29 @@ function App() {
           onSaveToHistory={handleSaveToHistory}
         />
 
+        {isPatternOpen && (
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
+            <PatternSelector onSelectPattern={handlePatternSelect} />
+          </div>
+        )}
+
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Left Column: Pattern Selector */}
-            <div className="space-y-6">
-              <PatternSelector onSelectPattern={handlePatternSelect} />
+            {/* Left Column: Left Control Panel */}
+            <div>
+              <LeftControlPanel
+                style={config.style}
+                data={config.data}
+                mode={config.mode}
+                simpleBodyHeight={config.simpleBodyHeight}
+                forceBullish={config.forceBullish}
+                onStyleChange={handleStyleChange}
+                onDataChange={handleDataChange}
+                onModeChange={handleModeChange}
+                onSimpleBodyHeightChange={handleSimpleBodyHeightChange}
+                onForceBullishChange={handleForceBullishChange}
+              />
             </div>
-
             {/* Middle Column: Candlestick Renderer */}
             <div>
               <CandlestickRenderer
@@ -188,19 +208,11 @@ function App() {
               />
             </div>
 
-            {/* Right Column: Control Panel */}
+            {/* Right Column: Right Control Panel */}
             <div>
-              <ControlPanel
+              <RightControlPanel
                 style={config.style}
-                data={config.data}
-                mode={config.mode}
-                simpleBodyHeight={config.simpleBodyHeight}
-                forceBullish={config.forceBullish}
                 onStyleChange={handleStyleChange}
-                onDataChange={handleDataChange}
-                onModeChange={handleModeChange}
-                onSimpleBodyHeightChange={handleSimpleBodyHeightChange}
-                onForceBullishChange={handleForceBullishChange}
               />
             </div>
           </div>

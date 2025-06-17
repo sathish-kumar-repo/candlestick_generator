@@ -7,10 +7,12 @@ import {
   Download,
   Shuffle,
   Save,
+  CandlestickChart,
 } from "lucide-react";
 
 interface NavbarProps {
   isDark: boolean;
+  onToggelPattern: () => void;
   onToggleTheme: () => void;
   onReset: () => void;
   onShare: () => void;
@@ -21,6 +23,7 @@ interface NavbarProps {
 
 const Navbar: React.FC<NavbarProps> = ({
   isDark,
+  onToggelPattern,
   onToggleTheme,
   onReset,
   onShare,
@@ -41,6 +44,13 @@ const Navbar: React.FC<NavbarProps> = ({
           </div>
 
           <div className="flex items-center space-x-2">
+            <button
+              onClick={onToggelPattern}
+              className="p-2 rounded-lg bg-pink-100 hover:bg-pink-200 dark:bg-pink-900 dark:hover:bg-pink-800 text-pink-600 dark:text-pink-300 transition-colors"
+              title="Predefined Patterns"
+            >
+              <CandlestickChart className="w-5 h-5" />
+            </button>
             <button
               onClick={onSaveToHistory}
               className="p-2 rounded-lg bg-indigo-100 hover:bg-indigo-200 dark:bg-indigo-900 dark:hover:bg-indigo-800 text-indigo-600 dark:text-indigo-300 transition-colors"
