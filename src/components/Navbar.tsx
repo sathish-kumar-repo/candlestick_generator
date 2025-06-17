@@ -7,6 +7,7 @@ import {
   Shuffle,
   Save,
   CandlestickChart,
+  Copy,
 } from "lucide-react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -17,6 +18,7 @@ interface NavbarProps {
   onToggleTheme: () => void;
   onReset: () => void;
   onExport: () => void;
+  onRawCopy: () => void;
   onRandomGenerate: () => void;
   onSaveToHistory: () => void;
 }
@@ -27,6 +29,7 @@ const Navbar: React.FC<NavbarProps> = ({
   onToggleTheme,
   onReset,
   onExport,
+  onRawCopy,
   onRandomGenerate,
   onSaveToHistory,
 }) => {
@@ -89,10 +92,18 @@ const Navbar: React.FC<NavbarProps> = ({
 
               <button
                 onClick={onExport}
-                className="p-2 rounded-lg bg-green-100 hover:bg-green-200 dark:bg-green-900 dark:hover:bg-green-800 text-green-600 dark:text-green-300 transition-colors"
+                className="p-2 rounded-lg bg-blue-100 hover:bg-blue-200 dark:bg-blue-900 dark:hover:bg-blue-800 text-blue-600 dark:text-blue-300 transition-colors"
                 title="Export"
               >
                 <Download className="w-5 h-5" />
+              </button>
+
+              <button
+                onClick={onRawCopy}
+                className="p-2 rounded-lg bg-green-100 hover:bg-green-200 dark:bg-green-900 dark:hover:bg-green-800 text-green-600 dark:text-green-300 transition-colors"
+                title="Raw Candlestick Copy"
+              >
+                <Copy className="w-5 h-5" />
               </button>
 
               <button

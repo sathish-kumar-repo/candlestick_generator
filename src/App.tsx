@@ -29,7 +29,7 @@ const defaultConfig: CandlestickConfig = {
   mode: "simple",
   forceBullish: true,
   exportOptions: {
-    format: "png",
+    format: "svg",
     withPrice: false,
     pricePosition: "left",
     showOpen: true,
@@ -129,6 +129,10 @@ function App() {
     copyCandlestickToClipboard(config, isDark);
   };
 
+  const handleRawCopy = () => {
+    copyCandlestickToClipboard(defaultConfig, isDark);
+  };
+
   const handleExportOptionsChange = (
     updates: Partial<typeof config.exportOptions>
   ) => {
@@ -147,6 +151,7 @@ function App() {
           onToggelPattern={() => setIsPatternOpen(!isPatternOpen)}
           onReset={handleReset}
           onExport={() => setIsExportModalOpen(true)}
+          onRawCopy={handleRawCopy}
           onRandomGenerate={handleRandomGenerate}
           onSaveToHistory={handleSaveToHistory}
         />
