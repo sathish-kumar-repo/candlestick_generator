@@ -156,7 +156,7 @@ const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
           </div>
 
           {/* ❗ Individual OHLC Validation Messages */}
-          <div className="text-xs text-red-500 space-y-1">
+          <div className="p-2 rounded-lg bg-red-100 hover:bg-red-200 dark:bg-red-900 dark:hover:bg-red-800 text-red-600 dark:text-red-300 transition-colors space-y-1">
             {highTooLow && (
               <p>High must be greater than or equal to max(Open, Close).</p>
             )}

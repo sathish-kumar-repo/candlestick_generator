@@ -36,7 +36,7 @@ export interface CandlestickConfig {
   style: CandlestickStyle;
   mode: "ohlc" | "simple";
   simpleBodyHeight: number;
-  forceBullish: boolean; // New property to force bullish/bearish
+  forceBullish: boolean;
   exportOptions: ExportOptions;
 }
 
