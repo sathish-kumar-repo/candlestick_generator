@@ -16,7 +16,6 @@ interface NavbarProps {
   onToggelPattern: () => void;
   onToggleTheme: () => void;
   onReset: () => void;
-
   onExport: () => void;
   onRandomGenerate: () => void;
   onSaveToHistory: () => void;

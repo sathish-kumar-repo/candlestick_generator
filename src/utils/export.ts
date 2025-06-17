@@ -7,7 +7,6 @@ export const exportCandlestick = (
   const { exportOptions } = config;
   const { data, style, mode, forceBullish } = config;
 
-  // Calculate candlestick geometry
   let bodyHeight: number;
   let upperWickHeight: number;
   let lowerWickHeight: number;
@@ -30,23 +29,20 @@ export const exportCandlestick = (
     lowerWickHeight = style.wickBottomHeight;
   }
 
-  // Calculate dynamic dimensions
-  const totalHeight = upperWickHeight + bodyHeight + lowerWickHeight + 40; // padding top/bottom
-  const totalWidth = style.bodyWidth + 60; // padding left/right
+  const paddingX = 80; // Horizontal padding for price text
+  const totalHeight = upperWickHeight + bodyHeight + lowerWickHeight + 40;
+  const totalWidth = style.bodyWidth + paddingX * 2;
   const centerX = totalWidth / 2;
   const bodyTop = 20 + upperWickHeight;
 
-  // Colors
   const bodyColor = isBullish ? style.buyerColor : style.sellerColor;
   const wickColor = style.design === "minimal" ? "#6B7280" : bodyColor;
 
-  // Create SVG
   const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   svg.setAttribute("width", totalWidth.toString());
   svg.setAttribute("height", totalHeight.toString());
   svg.setAttribute("viewBox", `0 0 ${totalWidth} ${totalHeight}`);
 
-  // Background
   if (exportOptions.withBackground) {
     const bg = document.createElementNS("http://www.w3.org/2000/svg", "rect");
     bg.setAttribute("width", "100%");
@@ -55,7 +51,6 @@ export const exportCandlestick = (
     svg.appendChild(bg);
   }
 
-  // Grid
   if (exportOptions.withGrid) {
     const defs = document.createElementNS("http://www.w3.org/2000/svg", "defs");
     const pattern = document.createElementNS(
@@ -88,7 +83,6 @@ export const exportCandlestick = (
     svg.appendChild(gridRect);
   }
 
-  // Upper Wick
   if (upperWickHeight > 0) {
     const upperWick = document.createElementNS(
       "http://www.w3.org/2000/svg",
@@ -104,7 +98,6 @@ export const exportCandlestick = (
     svg.appendChild(upperWick);
   }
 
-  // Lower Wick
   if (lowerWickHeight > 0) {
     const lowerWick = document.createElementNS(
       "http://www.w3.org/2000/svg",
@@ -123,7 +116,6 @@ export const exportCandlestick = (
     svg.appendChild(lowerWick);
   }
 
-  // Body
   const body = document.createElementNS("http://www.w3.org/2000/svg", "rect");
   body.setAttribute("x", (centerX - style.bodyWidth / 2).toString());
   body.setAttribute("y", bodyTop.toString());
@@ -135,10 +127,10 @@ export const exportCandlestick = (
   body.setAttribute("ry", style.bodyBorderRadius.toString());
   svg.appendChild(body);
 
-  // Labels (optional)
   if (exportOptions.withPrice && mode === "ohlc") {
     const priceLabels = ["H", "O", "L", "C"];
     const priceValues = [data.high, data.open, data.low, data.close];
+    const lineHeight = 20;
 
     priceLabels.forEach((label, i) => {
       const show =
@@ -156,6 +148,7 @@ export const exportCandlestick = (
 
       if (!show) return;
 
+      const labelY = 20 + i * lineHeight;
       const text = document.createElementNS(
         "http://www.w3.org/2000/svg",
         "text"
@@ -163,30 +156,24 @@ export const exportCandlestick = (
       text.setAttribute("font-size", "12");
       text.setAttribute("fill", isDark ? "#d1d5db" : "#6b7280");
       text.textContent = `${label}: ${priceValues[i].toFixed(2)}`;
-      text.setAttribute("y", (20 + i * 15).toString());
+      text.setAttribute("y", labelY.toString());
 
-      if (
-        exportOptions.pricePosition === "left" ||
-        exportOptions.pricePosition === "both"
-      ) {
+      if (exportOptions.pricePosition === "left") {
         const leftText = text.cloneNode(true) as Element;
         leftText.setAttribute("x", "10");
+        leftText.setAttribute("text-anchor", "start");
         svg.appendChild(leftText);
       }
 
-      if (
-        exportOptions.pricePosition === "right" ||
-        exportOptions.pricePosition === "both"
-      ) {
+      if (exportOptions.pricePosition === "right") {
         const rightText = text.cloneNode(true) as Element;
-        rightText.setAttribute("x", (totalWidth - 100).toString());
-        rightText.setAttribute("text-anchor", "start");
+        rightText.setAttribute("x", (totalWidth - 10).toString()); // 10px from right
+        rightText.setAttribute("text-anchor", "end");
         svg.appendChild(rightText);
       }
     });
   }
 
-  // Export as image or SVG
   const serializer = new XMLSerializer();
   const svgString = serializer.serializeToString(svg);
 

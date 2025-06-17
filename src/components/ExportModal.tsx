@@ -87,23 +87,21 @@ const ExportModal: React.FC<ExportModalProps> = ({
                       Price Position
                     </label>
                     <div className="grid grid-cols-2 gap-2">
-                      {(["left", "right", "both", "none"] as const).map(
-                        (position) => (
-                          <button
-                            key={position}
-                            onClick={() =>
-                              onExportOptionsChange({ pricePosition: position })
-                            }
-                            className={`px-3 py-2 rounded-lg text-sm font-medium capitalize transition-colors ${
-                              exportOptions.pricePosition === position
-                                ? "bg-blue-500 text-white"
-                                : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
-                            }`}
-                          >
-                            {position}
-                          </button>
-                        )
-                      )}
+                      {(["left", "right"] as const).map((position) => (
+                        <button
+                          key={position}
+                          onClick={() =>
+                            onExportOptionsChange({ pricePosition: position })
+                          }
+                          className={`px-3 py-2 rounded-lg text-sm font-medium capitalize transition-colors ${
+                            exportOptions.pricePosition === position
+                              ? "bg-blue-500 text-white"
+                              : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
+                          }`}
+                        >
+                          {position}
+                        </button>
+                      ))}
                     </div>
                   </div>
 

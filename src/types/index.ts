@@ -22,7 +22,7 @@ export interface CandlestickStyle {
 export interface ExportOptions {
   format: "svg" | "png" | "jpg";
   withPrice: boolean;
-  pricePosition: "left" | "right" | "both" | "none";
+  pricePosition: "left" | "right";
   showOpen: boolean;
   showHigh: boolean;
   showLow: boolean;
