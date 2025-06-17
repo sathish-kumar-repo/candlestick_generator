@@ -103,27 +103,6 @@ function App() {
     addToHistory(config);
   };
 
-  const handleShare = async () => {
-    const shareData = {
-      title: "Candlestick Generator",
-      text: `Check out this ${config.name} candlestick pattern!`,
-      url: window.location.href,
-    };
-
-    if (navigator.share) {
-      try {
-        await navigator.share(shareData);
-      } catch (error) {
-        console.log("Error sharing:", error);
-      }
-    } else {
-      // Fallback: copy to clipboard
-      const configString = JSON.stringify(config, null, 2);
-      await navigator.clipboard.writeText(configString);
-      alert("Configuration copied to clipboard!");
-    }
-  };
-
   const handleRandomGenerate = () => {
     const randomPattern =
       predefinedPatterns[Math.floor(Math.random() * predefinedPatterns.length)];
@@ -167,7 +146,6 @@ function App() {
           onToggleTheme={() => setIsDark(!isDark)}
           onToggelPattern={() => setIsPatternOpen(!isPatternOpen)}
           onReset={handleReset}
-          onShare={handleShare}
           onExport={() => setIsExportModalOpen(true)}
           onRandomGenerate={handleRandomGenerate}
           onSaveToHistory={handleSaveToHistory}

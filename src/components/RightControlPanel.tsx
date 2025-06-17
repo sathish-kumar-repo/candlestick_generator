@@ -46,8 +46,8 @@ const RightControlPanel: React.FC<RightControlPanelProps> = ({
             </label>
             <input
               type="range"
-              min="1"
-              max="50"
+              min="10"
+              max="100"
               value={style.bodyWidth}
               onChange={(e) =>
                 onStyleChange({ bodyWidth: parseInt(e.target.value) })
