@@ -1,184 +1,168 @@
-import { PredefinedPattern } from '../types';
+import { PredefinedPattern } from "../types";
 
 export const predefinedPatterns: PredefinedPattern[] = [
-  // Bullish Reversal Patterns
   {
-    name: 'Hammer',
-    category: 'bullish',
-    description: 'Small body at the top with long lower shadow',
-    data: { open: 102, high: 105, low: 90, close: 104 },
-    icon: '🔨'
+    name: "Hammer",
+    category: "bullish",
+    description: "Small body at the top with long lower shadow",
+    data: { open: 102, high: 104, low: 90, close: 104 },
+    icon: "🔨",
   },
   {
-    name: 'Inverted Hammer',
-    category: 'bullish',
-    description: 'Small body at the bottom with long upper shadow',
-    data: { open: 98, high: 115, low: 95, close: 100 },
-    icon: '🔼'
+    name: "Inverted Hammer",
+    category: "bullish",
+    description: "Small body at the bottom with long upper shadow",
+    data: { open: 100, high: 115, low: 100, close: 102 },
+    icon: "🔨",
   },
   {
-    name: 'Dragonfly Doji',
-    category: 'bullish',
-    description: 'Open and close at the high with long lower shadow',
-    data: { open: 110, high: 110, low: 95, close: 110 },
-    icon: '🐲'
+    name: "Pin Bar",
+    category: "bullish",
+    description: "Long tail with small body at the opposite end",
+    data: { open: 105, high: 107, low: 85, close: 106 },
+    icon: "📌",
   },
   {
-    name: 'Bullish Marubozu',
-    category: 'bullish',
-    description: 'Long bullish candle with no shadows',
-    data: { open: 95, high: 110, low: 95, close: 110 },
-    icon: '📈'
+    name: "Dragonfly Doji",
+    category: "bullish",
+    description: "Open, high and close at same price with long lower shadow",
+    data: { open: 100, high: 100, low: 80, close: 100 },
+    icon: "🚀",
   },
   {
-    name: 'Spinning Bottom',
-    category: 'bullish',
-    description: 'Small body with equal upper and lower shadows',
-    data: { open: 99, high: 108, low: 92, close: 101 },
-    icon: '🔄'
+    name: "Bullish Marubozu",
+    category: "bullish",
+    description: "No shadows, long green body",
+    data: { open: 100, high: 120, low: 100, close: 120 },
+    icon: "🟢",
   },
   {
-    name: 'Bullish Engulfing',
-    category: 'bullish',
-    description: 'Large bullish candle that engulfs previous bearish candle',
-    data: { open: 95, high: 115, low: 93, close: 113 },
-    icon: '🤗'
+    name: "Spinning Bottom",
+    category: "bullish",
+    description: "Small body with shadows of roughly equal length",
+    data: { open: 102, high: 105, low: 99, close: 103 },
+    icon: "🌀",
   },
   {
-    name: 'Morning Star',
-    category: 'bullish',
-    description: 'Small body between two larger candles',
-    data: { open: 98, high: 102, low: 96, close: 100 },
-    icon: '🌅'
+    name: "Open Marubozu",
+    category: "bullish",
+    description: "No upper shadow, long green body",
+    data: { open: 100, high: 120, low: 95, close: 120 },
+    icon: "🟢",
   },
   {
-    name: 'Piercing Pattern',
-    category: 'bullish',
-    description: 'Bullish candle that opens below and closes above midpoint',
-    data: { open: 92, high: 108, low: 90, close: 106 },
-    icon: '⚡'
-  },
-
-  // Bearish Reversal Patterns
-  {
-    name: 'Hanging Man',
-    category: 'bearish',
-    description: 'Small body at the top with long lower shadow (bearish context)',
-    data: { open: 108, high: 110, low: 95, close: 106 },
-    icon: '🪓'
+    name: "Close Marubozu",
+    category: "bullish",
+    description: "No lower shadow, long green body",
+    data: { open: 100, high: 120, low: 100, close: 115 },
+    icon: "🟢",
   },
   {
-    name: 'Shooting Star',
-    category: 'bearish',
-    description: 'Small body at the bottom with long upper shadow',
-    data: { open: 102, high: 115, low: 100, close: 98 },
-    icon: '⭐'
+    name: "Hanging Man",
+    category: "bearish",
+    description:
+      "Small body at the top with long lower shadow (appears after uptrend)",
+    data: { open: 122, high: 122, low: 100, close: 119 },
+    icon: "🧛",
   },
   {
-    name: 'Gravestone Doji',
-    category: 'bearish',
-    description: 'Open and close at the low with long upper shadow',
-    data: { open: 95, high: 110, low: 95, close: 95 },
-    icon: '🪦'
+    name: "Shooting Star",
+    category: "bearish",
+    description:
+      "Small body at the bottom with long upper shadow (appears after uptrend)",
+    data: { open: 121, high: 140, low: 118, close: 118 },
+    icon: "⭐",
   },
   {
-    name: 'Bearish Marubozu',
-    category: 'bearish',
-    description: 'Long bearish candle with no shadows',
-    data: { open: 110, high: 110, low: 95, close: 95 },
-    icon: '📉'
+    name: "Pin Bar",
+    category: "bearish",
+    description: "Long upper shadow with small body at the opposite end",
+    data: { open: 120, high: 140, low: 118, close: 119 },
+    icon: "📌",
   },
   {
-    name: 'Spinning Top',
-    category: 'bearish',
-    description: 'Small body with equal upper and lower shadows (bearish context)',
-    data: { open: 101, high: 108, low: 92, close: 99 },
-    icon: '🌪️'
+    name: "Gravestone Doji",
+    category: "bearish",
+    description: "Open, low and close at same price with long upper shadow",
+    data: { open: 100, high: 120, low: 100, close: 100 },
+    icon: "🪦",
   },
   {
-    name: 'Bearish Engulfing',
-    category: 'bearish',
-    description: 'Large bearish candle that engulfs previous bullish candle',
-    data: { open: 115, high: 117, low: 93, close: 95 },
-    icon: '🫂'
+    name: "Bearish Marubozu",
+    category: "bearish",
+    description: "No shadows, long red body",
+    data: { open: 120, high: 120, low: 100, close: 100 },
+    icon: "🔴",
   },
   {
-    name: 'Evening Star',
-    category: 'bearish',
-    description: 'Small body at top indicating reversal',
-    data: { open: 102, high: 106, low: 98, close: 100 },
-    icon: '🌆'
+    name: "Spinning Top",
+    category: "bearish",
+    description:
+      "Small body with shadows of roughly equal length (appears after uptrend)",
+    data: { open: 110, high: 115, low: 105, close: 109 },
+    icon: "🌀",
   },
   {
-    name: 'Dark Cloud Cover',
-    category: 'bearish',
-    description: 'Bearish candle that opens above and closes below midpoint',
-    data: { open: 112, high: 115, low: 96, close: 98 },
-    icon: '☁️'
+    name: "Open Marubozu",
+    category: "bearish",
+    description: "No upper shadow, long red body",
+    data: { open: 120, high: 120, low: 100, close: 105 },
+    icon: "🔴",
   },
   {
-    name: 'Three Black Crows',
-    category: 'bearish',
-    description: 'Three consecutive bearish candles',
-    data: { open: 108, high: 110, low: 95, close: 97 },
-    icon: '🐦‍⬛'
-  },
-
-  // Indecision / Neutral Patterns
-  {
-    name: 'Standard Doji',
-    category: 'neutral',
-    description: 'Open equals close with small upper and lower shadows',
-    data: { open: 100, high: 103, low: 97, close: 100 },
-    icon: '➕'
+    name: "Close Marubozu",
+    category: "bearish",
+    description: "No lower shadow, long red body",
+    data: { open: 120, high: 125, low: 100, close: 100 },
+    icon: "🔴",
   },
   {
-    name: 'Long-Legged Doji',
-    category: 'neutral',
-    description: 'Open equals close with long upper and lower shadows',
-    data: { open: 100, high: 115, low: 85, close: 100 },
-    icon: '🕷️'
+    name: "Standard Doji",
+    category: "neutral",
+    description: "Open and close at same price with small shadows",
+    data: { open: 100, high: 102, low: 98, close: 100 },
+    icon: "➕",
   },
   {
-    name: 'High-Wave Candle',
-    category: 'neutral',
-    description: 'Small body with very long shadows',
-    data: { open: 98, high: 120, low: 80, close: 102 },
-    icon: '🌊'
+    name: "Long-Legged Doji",
+    category: "neutral",
+    description: "Open and close at same price with long shadows",
+    data: { open: 100, high: 120, low: 80, close: 100 },
+    icon: "➕",
   },
   {
-    name: 'Paper Umbrella',
-    category: 'neutral',
-    description: 'Small body with long lower shadow',
-    data: { open: 105, high: 108, low: 90, close: 103 },
-    icon: '☂️'
+    name: "Dragonfly Doji",
+    category: "neutral",
+    description: "Open, high and close at same price with long lower shadow",
+    data: { open: 100, high: 100, low: 80, close: 100 },
+    icon: "🚀",
   },
   {
-    name: 'Four Price Doji',
-    category: 'neutral',
-    description: 'All four prices are the same',
-    data: { open: 100, high: 100, low: 100, close: 100 },
-    icon: '🎯'
+    name: "Gravestone Doji",
+    category: "neutral",
+    description: "Open, low and close at same price with long upper shadow",
+    data: { open: 100, high: 120, low: 100, close: 100 },
+    icon: "🪦",
   },
   {
-    name: 'Rickshaw Man',
-    category: 'neutral',
-    description: 'Long upper and lower shadows with small body in middle',
-    data: { open: 99, high: 115, low: 85, close: 101 },
-    icon: '🛺'
+    name: "Spinning Top",
+    category: "neutral",
+    description: "Small body with shadows of roughly equal length",
+    data: { open: 100, high: 105, low: 95, close: 101 },
+    icon: "🌀",
   },
   {
-    name: 'Belt Hold',
-    category: 'neutral',
-    description: 'Long body with minimal upper shadow',
-    data: { open: 95, high: 110, low: 95, close: 108 },
-    icon: '🥋'
+    name: "High-Wave Candle",
+    category: "neutral",
+    description: "Small body with very long shadows",
+    data: { open: 100, high: 120, low: 80, close: 101 },
+    icon: "🌊",
   },
   {
-    name: 'Tri-Star',
-    category: 'neutral',
-    description: 'Three doji candles in sequence',
-    data: { open: 100, high: 105, low: 95, close: 100 },
-    icon: '⭐⭐⭐'
-  }
+    name: "Paper Umbrella",
+    category: "neutral",
+    description: "Long lower shadow with small upper body",
+    data: { open: 100, high: 102, low: 80, close: 101 },
+    icon: "☂️",
+  },
 ];

@@ -31,7 +31,6 @@ const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
       <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
         Candlestick Controls
       </h3>
-
       {/* Mode Selection */}
       <div>
         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -60,35 +59,36 @@ const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
           </button>
         </div>
       </div>
-
       {/* Buyer/Seller Toggle */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-          Candlestick Type
-        </label>
-        <div className="flex space-x-2">
-          <button
-            onClick={() => onForceBullishChange(true)}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-              forceBullish
-                ? "bg-green-500 text-white"
-                : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
-            }`}
-          >
-            🟢 Buyer (Bullish)
-          </button>
-          <button
-            onClick={() => onForceBullishChange(false)}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-              !forceBullish
-                ? "bg-red-500 text-white"
-                : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
-            }`}
-          >
-            🔴 Seller (Bearish)
-          </button>
+      {mode == "simple" && (
+        <div>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            Candlestick Type
+          </label>
+          <div className="flex space-x-2">
+            <button
+              onClick={() => onForceBullishChange(true)}
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                forceBullish
+                  ? "bg-green-500 text-white"
+                  : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
+              }`}
+            >
+              🟢 Buyer (Bullish)
+            </button>
+            <button
+              onClick={() => onForceBullishChange(false)}
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                !forceBullish
+                  ? "bg-red-500 text-white"
+                  : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
+              }`}
+            >
+              🔴 Seller (Bearish)
+            </button>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Data Inputs */}
       {mode === "ohlc" ? (
@@ -164,7 +164,6 @@ const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
           </div>
         </div>
       )}
-
       {/* Design Style */}
       <div>
         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -188,32 +187,33 @@ const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
           )}
         </div>
       </div>
-
       {/* Colors */}
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Buyer Color
-          </label>
-          <input
-            type="color"
-            value={style.buyerColor}
-            onChange={(e) => onStyleChange({ buyerColor: e.target.value })}
-            className="w-full h-10 rounded-lg border border-gray-300 dark:border-gray-600"
-          />
+      {mode == "simple" && (
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Buyer Color
+            </label>
+            <input
+              type="color"
+              value={style.buyerColor}
+              onChange={(e) => onStyleChange({ buyerColor: e.target.value })}
+              className="w-full h-10 rounded-lg border border-gray-300 dark:border-gray-600"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Seller Color
+            </label>
+            <input
+              type="color"
+              value={style.sellerColor}
+              onChange={(e) => onStyleChange({ sellerColor: e.target.value })}
+              className="w-full h-10 rounded-lg border border-gray-300 dark:border-gray-600"
+            />
+          </div>
         </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Seller Color
-          </label>
-          <input
-            type="color"
-            value={style.sellerColor}
-            onChange={(e) => onStyleChange({ sellerColor: e.target.value })}
-            className="w-full h-10 rounded-lg border border-gray-300 dark:border-gray-600"
-          />
-        </div>
-      </div>
+      )}
     </div>
   );
 };
