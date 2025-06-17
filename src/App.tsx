@@ -211,6 +211,7 @@ function App() {
             {/* Right Column: Right Control Panel */}
             <div>
               <RightControlPanel
+                isSimple={config.mode == "simple"}
                 style={config.style}
                 onStyleChange={handleStyleChange}
               />

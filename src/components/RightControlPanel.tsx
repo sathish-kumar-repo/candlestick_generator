@@ -3,11 +3,13 @@ import { CandlestickStyle } from "../types";
 
 interface RightControlPanelProps {
   style: CandlestickStyle;
+  isSimple: boolean;
   onStyleChange: (updates: Partial<CandlestickStyle>) => void;
 }
 
 const RightControlPanel: React.FC<RightControlPanelProps> = ({
   style,
+  isSimple,
   onStyleChange,
 }) => {
   return (
@@ -72,41 +74,49 @@ const RightControlPanel: React.FC<RightControlPanelProps> = ({
       </div>
 
       {/* Wick Properties */}
+
       <div>
         <h4 className="text-md font-medium text-gray-900 dark:text-white mb-3">
           Wick Properties
         </h4>
         <div className="space-y-3">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Top Height ({style.wickTopHeight}px)
-            </label>
-            <input
-              type="range"
-              min="0"
-              max="100"
-              value={style.wickTopHeight}
-              onChange={(e) =>
-                onStyleChange({ wickTopHeight: parseInt(e.target.value) })
-              }
-              className="w-full"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Bottom Height ({style.wickBottomHeight}px)
-            </label>
-            <input
-              type="range"
-              min="0"
-              max="100"
-              value={style.wickBottomHeight}
-              onChange={(e) =>
-                onStyleChange({ wickBottomHeight: parseInt(e.target.value) })
-              }
-              className="w-full"
-            />
-          </div>
+          {isSimple && (
+            <>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Top Height ({style.wickTopHeight}px)
+                </label>
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  value={style.wickTopHeight}
+                  onChange={(e) =>
+                    onStyleChange({ wickTopHeight: parseInt(e.target.value) })
+                  }
+                  className="w-full"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Bottom Height ({style.wickBottomHeight}px)
+                </label>
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  value={style.wickBottomHeight}
+                  onChange={(e) =>
+                    onStyleChange({
+                      wickBottomHeight: parseInt(e.target.value),
+                    })
+                  }
+                  className="w-full"
+                />
+              </div>
+            </>
+          )}
+
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Thickness ({style.wickThickness}px)
